@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static guru.springfamework.controller.v1.CategoryController.URI;
+
 @Controller
 @Slf4j
-@RequestMapping("/api/v1/categories")
+@RequestMapping(URI)
 public class CategoryController {
 
+    public static final String URI = "/api/v1/categories";
     private final CategoryService categoryService;
 
     public CategoryController(CategoryService categoryService) {
@@ -23,7 +26,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<CategoryListDTO> get() {
+    public ResponseEntity<CategoryListDTO> getAll() {
         return new ResponseEntity<>(new CategoryListDTO(categoryService.findAll()), HttpStatus.OK);
     }
 

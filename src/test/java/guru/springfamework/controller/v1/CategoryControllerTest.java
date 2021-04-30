@@ -47,7 +47,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void testListCategories() throws Exception {
+    void getAll() throws Exception {
         // given
         CategoryDTO categoryDTO2 = new CategoryDTO();
         categoryDTO2.setId(2L);
@@ -67,12 +67,12 @@ class CategoryControllerTest {
     }
 
     @Test
-    void testGetByNameCategories() throws Exception {
+    void getByName() throws Exception {
         // given
         when(categoryService.findByName(anyString())).thenReturn(categoryDTO);
 
         // when
-        mockMvc.perform(get("/api/v1/categories/" + CATEGORY_NAME)
+        mockMvc.perform(get(CategoryController.URI + CATEGORY_NAME)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(CATEGORY_NAME)));
