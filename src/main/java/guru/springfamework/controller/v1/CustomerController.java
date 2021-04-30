@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import static guru.springfamework.controller.v1.CustomerController.URI;
 
@@ -33,5 +31,10 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> getById(@PathVariable Long id) {
         return new ResponseEntity<>(customerService.findById(id), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<CustomerDTO> create(@RequestBody CustomerDTO customerDTO){
+        return new ResponseEntity<CustomerDTO>(customerService.create(customerDTO), HttpStatus.CREATED);
     }
 }

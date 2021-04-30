@@ -2,6 +2,7 @@ package guru.springfamework.service;
 
 import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.api.v1.model.mapper.CustomerMapper;
+import guru.springfamework.controller.v1.CustomerController;
 import guru.springfamework.domain.Customer;
 import guru.springfamework.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,5 +67,27 @@ class CustomerServiceImplTest {
         CustomerDTO customerDTO = customerServiceImpl.findById(1L);
 
         assertEquals(FIRSTNAME, customerDTO.getFirstname());
+    }
+
+    @Test
+    void create() throws Exception {
+
+        //given
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(FIRSTNAME);
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setFirstname(customerDTO.getFirstname());
+        savedCustomer.setLastname(customerDTO.getLastname());
+        savedCustomer.setId(ID);
+
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+
+        //when
+        CustomerDTO savedDto = customerServiceImpl.create(customerDTO);
+
+        //then
+        assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
+        assertEquals(CustomerController.URI + "/" + ID, savedDto.getCustomerUrl());
     }
 }
