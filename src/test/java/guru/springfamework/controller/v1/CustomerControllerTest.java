@@ -15,12 +15,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,6 +38,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 
     private MockMvc mockMvc;
     private CustomerDTO customerDTO;
+    private CustomerDTO returnDTO;
 
     @BeforeEach
     void setUp() {
@@ -48,6 +48,11 @@ class CustomerControllerTest extends AbstractRestControllerTest {
         customerDTO.setFirstname(FIRSTNAME);
         customerDTO.setLastname(LASTNAME);
         customerDTO.setCustomerUrl(CustomerController.URI + "/" + ID);
+
+        returnDTO = new CustomerDTO();
+        returnDTO.setFirstname(customerDTO.getFirstname());
+        returnDTO.setLastname(customerDTO.getLastname());
+        returnDTO.setCustomerUrl(CustomerController.URI + "/" + ID);
     }
 
     @Test
@@ -87,26 +92,30 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 
     @Test
     void create() throws Exception {
-        String firstname = "Fred";
-
         //given
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setFirstname(firstname);
-        customerDTO.setLastname("Flintstone");
-
-        CustomerDTO returnDTO = new CustomerDTO();
-        returnDTO.setFirstname(customerDTO.getFirstname());
-        returnDTO.setLastname(customerDTO.getLastname());
-        returnDTO.setCustomerUrl(CustomerController.URI + "/" + ID);
-
-        when(customerService.create(customerDTO)).thenReturn(returnDTO);
+        when(customerService.save(customerDTO)).thenReturn(returnDTO);
 
         //when/then
         mockMvc.perform(post(CustomerController.URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(customerDTO)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.firstname", equalTo(firstname)))
+                .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)))
                 .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.URI + "/" + ID)));
     }
+
+/*    @Test
+    void update() throws Exception {
+        //given
+        when(customerService.save(any(CustomerDTO.class))).thenReturn(returnDTO);
+
+        //when/then
+        mockMvc.perform(put(CustomerController.URI + "/" + ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstname", equalTo("Fred")))
+                .andExpect(jsonPath("$.lastname", equalTo("Flintstone")))
+                .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.URI + "/" + ID)));
+    }*/
 }

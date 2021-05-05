@@ -35,8 +35,15 @@ class CustomerServiceImplTest {
     @InjectMocks
     private CustomerServiceImpl customerServiceImpl;
 
+    private CustomerDTO customerDTO;
+
     @BeforeEach
     public void setUp() {
+        customerDTO = new CustomerDTO();
+        customerDTO.setFirstname(FIRSTNAME);
+        customerDTO.setLastname(LASTNAME);
+
+        when(customerMapper.toDTO(any(Customer.class))).thenReturn(customerDTO);
     }
 
     @Test
@@ -53,11 +60,11 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void findByName() {
+    void findById() {
 
         //given
         Customer customer1 = new Customer();
-        customer1.setId(1L);
+        customer1.setId(ID);
         customer1.setFirstname(FIRSTNAME);
         customer1.setLastname(LASTNAME);
 
@@ -70,24 +77,22 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void create() throws Exception {
-
+    void create() {
         //given
-        CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setFirstname(FIRSTNAME);
-
         Customer savedCustomer = new Customer();
         savedCustomer.setFirstname(customerDTO.getFirstname());
         savedCustomer.setLastname(customerDTO.getLastname());
         savedCustomer.setId(ID);
 
+        when(customerMapper.toEntity(any(CustomerDTO.class))).thenReturn(savedCustomer);
         when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
 
         //when
-        CustomerDTO savedDto = customerServiceImpl.create(customerDTO);
+        CustomerDTO savedDto = customerServiceImpl.save(customerDTO);
 
         //then
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
+        assertEquals(customerDTO.getLastname(), savedDto.getLastname());
         assertEquals(CustomerController.URI + "/" + ID, savedDto.getCustomerUrl());
     }
 }
