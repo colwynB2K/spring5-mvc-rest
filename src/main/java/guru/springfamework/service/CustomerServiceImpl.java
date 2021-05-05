@@ -48,11 +48,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO create(CustomerDTO customerDTO) {
         Customer customer = customerMapper.toEntity(customerDTO);
 
-        Customer savedCustomer = customerRepository.save(customer);
-        CustomerDTO returnDto = customerMapper.toDTO(savedCustomer);
-        returnDto.setCustomerUrl(CustomerController.URI + "/" + savedCustomer.getId());
-
-        return returnDto;
+        return saveAndReturnDTO(customer);
     }
 
     @Override
@@ -60,6 +56,25 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerMapper.toEntity(customerDTO);
         customer.setId(id);
 
+        return saveAndReturnDTO(customer);
+    }
+
+    @Override
+    public CustomerDTO patch(Long id, CustomerDTO customerDTO) {
+
+        Customer customer = customerRepository.findById(id)
+                                            .orElseThrow(RuntimeException::new); // TODO: Implement better exception handling;
+        if (customerDTO.getFirstname() != null) {
+            customer.setFirstname(customerDTO.getFirstname());
+        }
+        if (customerDTO.getLastname() != null) {
+            customer.setLastname(customerDTO.getLastname());
+        }
+
+        return saveAndReturnDTO(customer);
+    }
+
+    private CustomerDTO saveAndReturnDTO(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
         CustomerDTO returnDto = customerMapper.toDTO(savedCustomer);
         returnDto.setCustomerUrl(CustomerController.URI + "/" + savedCustomer.getId());

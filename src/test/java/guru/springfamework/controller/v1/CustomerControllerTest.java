@@ -123,4 +123,24 @@ class CustomerControllerTest extends AbstractRestControllerTest {
                 .andExpect(jsonPath("$.lastname", equalTo("Flintstone")))
                 .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.URI + "/" + ID)));
     }
+
+    @Test
+    void patchCustomer() throws Exception {
+        //given
+        customerDTO.setFirstname("Fred");
+
+        returnDTO.setFirstname(customerDTO.getFirstname());
+        returnDTO.setLastname("Flintstone");
+
+        when(customerService.patch(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
+
+        //when/then
+        mockMvc.perform(patch(CustomerController.URI + "/" + ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(customerDTO)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstname", equalTo("Fred")))
+                .andExpect(jsonPath("$.lastname", equalTo("Flintstone")))
+                .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.URI + "/" + ID)));
+    }
 }

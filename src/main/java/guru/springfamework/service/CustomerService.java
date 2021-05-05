@@ -13,4 +13,6 @@ public interface CustomerService {
     CustomerDTO create(CustomerDTO customerDTO);
 
     CustomerDTO update(Long id, CustomerDTO customerDTO);
+
+    CustomerDTO patch(Long id, CustomerDTO customerDTO);
 }
