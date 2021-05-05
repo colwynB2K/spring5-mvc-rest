@@ -88,11 +88,33 @@ class CustomerServiceImplTest {
         when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
 
         //when
-        CustomerDTO savedDto = customerServiceImpl.save(customerDTO);
+        CustomerDTO savedDto = customerServiceImpl.create(customerDTO);
 
         //then
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
         assertEquals(customerDTO.getLastname(), savedDto.getLastname());
+        assertEquals(CustomerController.URI + "/" + ID, savedDto.getCustomerUrl());
+    }
+
+    @Test
+    void update() {
+
+        //given
+        customerDTO.setFirstname("Jim");
+
+        Customer savedCustomer = new Customer();
+        savedCustomer.setFirstname(customerDTO.getFirstname());
+        savedCustomer.setLastname(customerDTO.getLastname());
+        savedCustomer.setId(ID);
+
+        when(customerMapper.toEntity(any(CustomerDTO.class))).thenReturn(savedCustomer);
+        when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+
+        //when
+        CustomerDTO savedDto = customerServiceImpl.update(ID, customerDTO);
+
+        //then
+        assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
         assertEquals(CustomerController.URI + "/" + ID, savedDto.getCustomerUrl());
     }
 }

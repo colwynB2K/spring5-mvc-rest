@@ -93,7 +93,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
     @Test
     void create() throws Exception {
         //given
-        when(customerService.save(customerDTO)).thenReturn(returnDTO);
+        when(customerService.create(customerDTO)).thenReturn(returnDTO);
 
         //when/then
         mockMvc.perform(post(CustomerController.URI)
@@ -104,10 +104,15 @@ class CustomerControllerTest extends AbstractRestControllerTest {
                 .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.URI + "/" + ID)));
     }
 
-/*    @Test
+    @Test
     void update() throws Exception {
         //given
-        when(customerService.save(any(CustomerDTO.class))).thenReturn(returnDTO);
+        customerDTO.setFirstname("Fred");
+        customerDTO.setLastname("Flintstone");
+
+        returnDTO.setFirstname("Fred");
+        returnDTO.setLastname("Flintstone");
+        when(customerService.update(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
 
         //when/then
         mockMvc.perform(put(CustomerController.URI + "/" + ID)
@@ -117,5 +122,5 @@ class CustomerControllerTest extends AbstractRestControllerTest {
                 .andExpect(jsonPath("$.firstname", equalTo("Fred")))
                 .andExpect(jsonPath("$.lastname", equalTo("Flintstone")))
                 .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.URI + "/" + ID)));
-    }*/
+    }
 }
