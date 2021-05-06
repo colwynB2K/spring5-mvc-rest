@@ -4,6 +4,7 @@ import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.api.v1.model.mapper.CustomerMapper;
 import guru.springfamework.controller.v1.CustomerController;
 import guru.springfamework.domain.Customer;
+import guru.springfamework.exception.ResourceNotFoundException;
 import guru.springfamework.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerDTO findById(Long id) {
         Customer customer = customerRepository.findById(id)
-                                            .orElseThrow(RuntimeException::new); // TODO: Implement better exception handling
+                                            .orElseThrow(ResourceNotFoundException::new);
         return customerMapper.toDTO(customer);
     }
 
@@ -63,7 +64,7 @@ public class CustomerServiceImpl implements CustomerService {
     public CustomerDTO patch(Long id, CustomerDTO customerDTO) {
 
         Customer customer = customerRepository.findById(id)
-                                            .orElseThrow(RuntimeException::new); // TODO: Implement better exception handling;
+                                            .orElseThrow(ResourceNotFoundException::new);
         if (customerDTO.getFirstname() != null) {
             customer.setFirstname(customerDTO.getFirstname());
         }

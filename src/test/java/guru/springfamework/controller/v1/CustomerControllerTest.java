@@ -1,6 +1,8 @@
 package guru.springfamework.controller.v1;
 
 import guru.springfamework.api.v1.model.CustomerDTO;
+import guru.springfamework.controller.RestResponseEntityExceptionHandler;
+import guru.springfamework.exception.ResourceNotFoundException;
 import guru.springfamework.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +45,8 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+                                .setControllerAdvice(new RestResponseEntityExceptionHandler()).build();
 
         customerDTO = new CustomerDTO();
         customerDTO.setFirstname(FIRSTNAME);
@@ -153,5 +156,15 @@ class CustomerControllerTest extends AbstractRestControllerTest {
                 .andExpect(status().isOk());
 
         verify(customerService).deleteById(anyLong());
+    }
+
+    @Test
+    void notFoundException() throws Exception {
+
+        when(customerService.findById(anyLong())).thenThrow(ResourceNotFoundException.class);
+
+        mockMvc.perform(get(CustomerController.URI + "/666")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }
