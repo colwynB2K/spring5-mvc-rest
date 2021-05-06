@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,8 +43,6 @@ class CustomerServiceImplTest {
         customerDTO = new CustomerDTO();
         customerDTO.setFirstname(FIRSTNAME);
         customerDTO.setLastname(LASTNAME);
-
-        when(customerMapper.toDTO(any(Customer.class))).thenReturn(customerDTO);
     }
 
     @Test
@@ -51,6 +50,7 @@ class CustomerServiceImplTest {
 
         //given
         when(customerRepository.findAll()).thenReturn(Arrays.asList(new Customer(), new Customer()));
+        when(customerMapper.toDTO(any(Customer.class))).thenReturn(customerDTO);
 
         //when
         List<CustomerDTO> customerDTOS = customerServiceImpl.findAll();
@@ -69,6 +69,7 @@ class CustomerServiceImplTest {
         customer1.setLastname(LASTNAME);
 
         when(customerRepository.findById(anyLong())).thenReturn(java.util.Optional.of(customer1));
+        when(customerMapper.toDTO(any(Customer.class))).thenReturn(customerDTO);
 
         //when
         CustomerDTO customerDTO = customerServiceImpl.findById(1L);
@@ -86,6 +87,7 @@ class CustomerServiceImplTest {
 
         when(customerMapper.toEntity(any(CustomerDTO.class))).thenReturn(savedCustomer);
         when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        when(customerMapper.toDTO(any(Customer.class))).thenReturn(customerDTO);
 
         //when
         CustomerDTO savedDto = customerServiceImpl.create(customerDTO);
@@ -109,6 +111,7 @@ class CustomerServiceImplTest {
 
         when(customerMapper.toEntity(any(CustomerDTO.class))).thenReturn(savedCustomer);
         when(customerRepository.save(any(Customer.class))).thenReturn(savedCustomer);
+        when(customerMapper.toDTO(any(Customer.class))).thenReturn(customerDTO);
 
         //when
         CustomerDTO savedDto = customerServiceImpl.update(ID, customerDTO);
@@ -116,5 +119,13 @@ class CustomerServiceImplTest {
         //then
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
         assertEquals(CustomerController.URI + "/" + ID, savedDto.getCustomerUrl());
+    }
+
+    @Test
+    void deleteById() {
+
+        customerServiceImpl.deleteById(ID);
+
+        verify(customerRepository).deleteById(anyLong());
     }
 }
