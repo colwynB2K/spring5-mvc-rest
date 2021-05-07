@@ -60,7 +60,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void getAll() throws Exception {
+    void findAll() throws Exception {
         // given
         CustomerDTO customerDTO2 = new CustomerDTO();
         customerDTO2.setFirstname(FIRSTNAME);
@@ -81,7 +81,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
     }
 
     @Test
-    void getById() throws Exception {
+    void findById() throws Exception {
         // given
         when(customerService.findById(anyLong())).thenReturn(customerDTO);
 
