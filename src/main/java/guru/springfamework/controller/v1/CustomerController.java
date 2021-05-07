@@ -3,15 +3,16 @@ package guru.springfamework.controller.v1;
 import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.api.v1.model.CustomerListDTO;
 import guru.springfamework.service.CustomerService;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import static guru.springfamework.controller.v1.CustomerController.URI;
 
-@Controller
+@RestController
 @Slf4j
 @RequestMapping(URI)
 public class CustomerController {
@@ -24,35 +25,34 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<CustomerListDTO> getAll() {
-        return new ResponseEntity<>(new CustomerListDTO(customerService.findAll()), HttpStatus.OK);
+    public CustomerListDTO getAll() {
+        return new CustomerListDTO(customerService.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerDTO> getById(@PathVariable Long id) {
-        return new ResponseEntity<>(customerService.findById(id), HttpStatus.OK);
+    public CustomerDTO getById(@PathVariable Long id) {
+        return customerService.findById(id);
     }
 
     @PostMapping
-    public ResponseEntity<CustomerDTO> create(@RequestBody CustomerDTO customerDTO){
-        return new ResponseEntity<>(customerService.create(customerDTO), HttpStatus.CREATED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public CustomerDTO create(@RequestBody CustomerDTO customerDTO){
+        return customerService.create(customerDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerDTO> update(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
-        return new ResponseEntity<>(customerService.update(id, customerDTO), HttpStatus.OK);
+    public CustomerDTO update(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
+        return customerService.update(id, customerDTO);
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<CustomerDTO> patch(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
-        return new ResponseEntity<>(customerService.patch(id, customerDTO), HttpStatus.OK);
+    public CustomerDTO patch(@PathVariable Long id, @RequestBody CustomerDTO customerDTO){
+        return customerService.patch(id, customerDTO);
     }
 
     @DeleteMapping({"/{id}"})
-    public ResponseEntity<Void> deleteById(@PathVariable Long id){
+    public void deleteById(@PathVariable Long id){
 
         customerService.deleteById(id);
-
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
