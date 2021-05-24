@@ -4,15 +4,18 @@ import guru.springfamework.api.v1.model.CustomerDTO;
 import guru.springfamework.api.v1.model.CustomerListDTO;
 import guru.springfamework.service.CustomerService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static guru.springfamework.controller.v1.CustomerController.URI;
 
 @RestController
+// Customize controller section header
+@Tag(name = "Customer Controller", description = "This is the Customer controller")
 @Slf4j
 @RequestMapping(URI)
 public class CustomerController {
@@ -25,6 +28,8 @@ public class CustomerController {
     }
 
     @GetMapping
+    // Customize endpoint operation section
+    @Operation(summary = "Get list of all customers", description = "This actually returns a list of CustomDTO objects.")
     public CustomerListDTO findAll() {
         return new CustomerListDTO(customerService.findAll());
     }
