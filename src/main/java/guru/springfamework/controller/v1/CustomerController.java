@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import static guru.springfamework.controller.v1.CustomerController.URI;
 
 @RestController
-// Customize controller section header
+// Customize controller section header for Swagger
 @Tag(name = "Customer Controller", description = "This is the Customer controller")
 @Slf4j
 @RequestMapping(URI)
@@ -28,7 +28,7 @@ public class CustomerController {
     }
 
     @GetMapping
-    // Customize endpoint operation section
+    // Customize endpoint operation section for Swagger
     @Operation(summary = "Get list of all customers", description = "This actually returns a list of CustomDTO objects.")
     public CustomerListDTO findAll() {
         return new CustomerListDTO(customerService.findAll());
