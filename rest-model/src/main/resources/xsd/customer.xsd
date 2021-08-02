@@ -1,16 +1,15 @@
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="CustomerListDTO" type="CustomerListDTOType"/>
-    <xs:complexType name="customersType">
+    <xs:element name="CustomerListDTO" type="CustomerListDTO"/>
+    <xs:complexType name="CustomerListDTO">
+        <xs:sequence>
+            <xs:element type="Customer" name="customers" minOccurs="0" maxOccurs="unbounded"/> <!-- type defines class name, name defines name of property in class, so this will create a CustomerListDTO class with inside a customers property of type List<Customer> because we say it is unbounded in occurence -->
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="Customer">
         <xs:sequence>
             <xs:element type="xs:string" name="firstname" minOccurs="0"/>
             <xs:element type="xs:string" name="lastname" minOccurs="0"/>
-            <xs:element type="xs:string" name="customer_url" minOccurs="0"/>
-            <xs:element type="customersType" name="customers" maxOccurs="unbounded" minOccurs="0"/>
-        </xs:sequence>
-    </xs:complexType>
-    <xs:complexType name="CustomerListDTOType">
-        <xs:sequence>
-            <xs:element type="customersType" name="customers"/>
+            <xs:element type="xs:string" name="url" minOccurs="0"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>
