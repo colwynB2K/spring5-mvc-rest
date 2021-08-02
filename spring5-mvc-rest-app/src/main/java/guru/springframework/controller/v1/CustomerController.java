@@ -1,7 +1,7 @@
 package guru.springframework.controller.v1;
 
-import guru.springframework.api.v1.model.CustomerDTO;
-import guru.springframework.api.v1.model.CustomerListDTO;
+import guru.springframework.model.CustomerDTO;
+import guru.springframework.model.CustomerListDTO;
 import guru.springframework.service.CustomerService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,7 +31,10 @@ public class CustomerController {
     // Customize endpoint operation section for Swagger
     @Operation(summary = "Get list of all customers", description = "This actually returns a list of CustomDTO objects.")
     public CustomerListDTO findAll() {
-        return new CustomerListDTO(customerService.findAll());
+        CustomerListDTO customerListDTO = new CustomerListDTO();
+        customerListDTO.getCustomers().addAll(customerService.findAll());
+
+        return customerListDTO;
     }
 
     @GetMapping("/{id}")

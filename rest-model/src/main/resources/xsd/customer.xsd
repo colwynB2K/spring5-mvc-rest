@@ -2,10 +2,10 @@
     <xs:element name="CustomerListDTO" type="CustomerListDTO"/>
     <xs:complexType name="CustomerListDTO">
         <xs:sequence>
-            <xs:element type="Customer" name="customers" minOccurs="0" maxOccurs="unbounded"/> <!-- type defines class name, name defines name of property in class, so this will create a CustomerListDTO class with inside a customers property of type List<Customer> because we say it is unbounded in occurence -->
+            <xs:element type="CustomerDTO" name="customers" minOccurs="0" maxOccurs="unbounded"/> <!-- type defines class name, name defines name of property in class, so this will create a CustomerListDTO class with inside a customers property of type List<Customer> because we say it is unbounded in occurence -->
         </xs:sequence>
     </xs:complexType>
-    <xs:complexType name="Customer">
+    <xs:complexType name="CustomerDTO">
         <xs:sequence>
             <xs:element type="xs:string" name="firstname" minOccurs="0"/>
             <xs:element type="xs:string" name="lastname" minOccurs="0"/>

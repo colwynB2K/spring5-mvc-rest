@@ -30,6 +30,7 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
+      - run: mvn install -DskipTests      # generate JAR and install JAR locally so it doesn't fail on rest-model module
       - run: mvn dependency:go-offline
 
       - save_cache:

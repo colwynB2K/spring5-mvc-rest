@@ -1,8 +1,8 @@
 package guru.springframework.controller.v1;
 
-import guru.springframework.api.v1.model.CustomerDTO;
 import guru.springframework.controller.RestResponseEntityExceptionHandler;
 import guru.springframework.exception.ResourceNotFoundException;
+import guru.springframework.model.CustomerDTO;
 import guru.springframework.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,12 +51,12 @@ class CustomerControllerTest extends AbstractRestControllerTest {
         customerDTO = new CustomerDTO();
         customerDTO.setFirstname(FIRSTNAME);
         customerDTO.setLastname(LASTNAME);
-        customerDTO.setCustomerUrl(CustomerController.URI + "/" + ID);
+        customerDTO.setUrl(CustomerController.URI + "/" + ID);
 
         returnDTO = new CustomerDTO();
         returnDTO.setFirstname(customerDTO.getFirstname());
         returnDTO.setLastname(customerDTO.getLastname());
-        returnDTO.setCustomerUrl(CustomerController.URI + "/" + ID);
+        returnDTO.setUrl(CustomerController.URI + "/" + ID);
     }
 
     @Test
@@ -65,7 +65,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
         CustomerDTO customerDTO2 = new CustomerDTO();
         customerDTO2.setFirstname(FIRSTNAME);
         customerDTO2.setLastname(LASTNAME);
-        customerDTO2.setCustomerUrl(CustomerController.URI + "/2");
+        customerDTO2.setUrl(CustomerController.URI + "/2");
 
         List<CustomerDTO> customerDTOs = Arrays.asList(customerDTO, customerDTO2);
 
@@ -108,7 +108,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
                 .content(asJsonString(customerDTO)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.firstname", equalTo(FIRSTNAME)))
-                .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.URI + "/" + ID)));
+                .andExpect(jsonPath("$.url", equalTo(CustomerController.URI + "/" + ID)));
     }
 
     @Test
@@ -129,7 +129,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo("Fred")))
                 .andExpect(jsonPath("$.lastname", equalTo("Flintstone")))
-                .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.URI + "/" + ID)));
+                .andExpect(jsonPath("$.url", equalTo(CustomerController.URI + "/" + ID)));
     }
 
     @Test
@@ -150,7 +150,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstname", equalTo("Fred")))
                 .andExpect(jsonPath("$.lastname", equalTo("Flintstone")))
-                .andExpect(jsonPath("$.customer_url", equalTo(CustomerController.URI + "/" + ID)));
+                .andExpect(jsonPath("$.url", equalTo(CustomerController.URI + "/" + ID)));
     }
 
     @Test

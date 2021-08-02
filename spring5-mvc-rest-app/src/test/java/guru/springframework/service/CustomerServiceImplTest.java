@@ -1,9 +1,9 @@
 package guru.springframework.service;
 
-import guru.springframework.api.v1.model.CustomerDTO;
 import guru.springframework.api.v1.model.mapper.CustomerMapper;
 import guru.springframework.controller.v1.CustomerController;
 import guru.springframework.domain.Customer;
+import guru.springframework.model.CustomerDTO;
 import guru.springframework.repository.CustomerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,7 +95,7 @@ class CustomerServiceImplTest {
         //then
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
         assertEquals(customerDTO.getLastname(), savedDto.getLastname());
-        assertEquals(CustomerController.URI + "/" + ID, savedDto.getCustomerUrl());
+        assertEquals(CustomerController.URI + "/" + ID, savedDto.getUrl());
     }
 
     @Test
@@ -118,7 +118,7 @@ class CustomerServiceImplTest {
 
         //then
         assertEquals(customerDTO.getFirstname(), savedDto.getFirstname());
-        assertEquals(CustomerController.URI + "/" + ID, savedDto.getCustomerUrl());
+        assertEquals(CustomerController.URI + "/" + ID, savedDto.getUrl());
     }
 
     @Test

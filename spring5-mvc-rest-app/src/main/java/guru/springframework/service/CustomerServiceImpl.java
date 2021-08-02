@@ -1,10 +1,10 @@
 package guru.springframework.service;
 
-import guru.springframework.api.v1.model.CustomerDTO;
 import guru.springframework.api.v1.model.mapper.CustomerMapper;
 import guru.springframework.controller.v1.CustomerController;
 import guru.springframework.domain.Customer;
 import guru.springframework.exception.ResourceNotFoundException;
+import guru.springframework.model.CustomerDTO;
 import guru.springframework.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .map(customer -> {
                     CustomerDTO customerDTO = customerMapper.toDTO(customer);
-                    customerDTO.setCustomerUrl(CustomerController.URI + customer.getId());
+                    customerDTO.setUrl(CustomerController.URI + customer.getId());
 
                     return customerDTO;
                 }).collect(Collectors.toList());
@@ -83,7 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerDTO saveAndReturnDTO(Customer customer) {
         Customer savedCustomer = customerRepository.save(customer);
         CustomerDTO returnDto = customerMapper.toDTO(savedCustomer);
-        returnDto.setCustomerUrl(CustomerController.URI + "/" + savedCustomer.getId());
+        returnDto.setUrl(CustomerController.URI + "/" + savedCustomer.getId());
 
         return returnDto;
     }
