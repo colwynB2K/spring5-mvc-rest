@@ -34,7 +34,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
     public static final String LASTNAME = "Weston";
 
     @Mock
-    private CustomerService customerService;
+    private CustomerService mockCustomerService;
 
     @InjectMocks
     private CustomerController customerController;
@@ -69,7 +69,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 
         List<CustomerDTO> customerDTOs = Arrays.asList(customerDTO, customerDTO2);
 
-        when(customerService.findAll()).thenReturn(customerDTOs);
+        when(mockCustomerService.findAll()).thenReturn(customerDTOs);
 
         // when
         mockMvc.perform(get(CustomerController.URI)
@@ -84,7 +84,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
     @Test
     void findById() throws Exception {
         // given
-        when(customerService.findById(anyLong())).thenReturn(customerDTO);
+        when(mockCustomerService.findById(anyLong())).thenReturn(customerDTO);
 
         // when
         mockMvc.perform(get(CustomerController.URI + "/" + ID)
@@ -99,7 +99,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
     @Test
     void create() throws Exception {
         //given
-        when(customerService.create(customerDTO)).thenReturn(returnDTO);
+        when(mockCustomerService.create(any())).thenReturn(returnDTO);
 
         //when/then
         mockMvc.perform(post(CustomerController.URI)
@@ -119,7 +119,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 
         returnDTO.setFirstname("Fred");
         returnDTO.setLastname("Flintstone");
-        when(customerService.update(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
+        when(mockCustomerService.update(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
 
         //when/then
         mockMvc.perform(put(CustomerController.URI + "/" + ID)
@@ -140,7 +140,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
         returnDTO.setFirstname(customerDTO.getFirstname());
         returnDTO.setLastname("Flintstone");
 
-        when(customerService.patch(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
+        when(mockCustomerService.patch(anyLong(), any(CustomerDTO.class))).thenReturn(returnDTO);
 
         //when/then
         mockMvc.perform(patch(CustomerController.URI + "/" + ID)
@@ -160,13 +160,13 @@ class CustomerControllerTest extends AbstractRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
-        verify(customerService).deleteById(anyLong());
+        verify(mockCustomerService).deleteById(anyLong());
     }
 
     @Test
     void notFoundException() throws Exception {
 
-        when(customerService.findById(anyLong())).thenThrow(ResourceNotFoundException.class);
+        when(mockCustomerService.findById(anyLong())).thenThrow(ResourceNotFoundException.class);
 
         mockMvc.perform(get(CustomerController.URI + "/666")
                 .contentType(MediaType.APPLICATION_JSON))
